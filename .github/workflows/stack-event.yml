@@ -1,0 +1,24 @@
+name: Stack event evidence
+
+on:
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  inspect-stack-event:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record safe pull-request metadata
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          BASE_REF: ${{ github.base_ref }}
+          STACK: ${{ toJson(github.event.pull_request.stack) }}
+        run: |
+          {
+            echo "head_ref=${HEAD_REF}"
+            echo "base_ref=${BASE_REF}"
+            echo "stack=${STACK}"
+          } >> "$GITHUB_STEP_SUMMARY"
